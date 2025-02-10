@@ -1,0 +1,58 @@
+version: "3.8"
+
+services:
+  postgres:
+    image: postgres:14
+    container_name: dev_postgres
+    env_file:
+      - ./secure_doc_analyzer/.env
+    environment:
+      POSTGRES_DB: ${DATABASE_NAME}
+      POSTGRES_USER: ${DATABASE_USER}
+      POSTGRES_PASSWORD: ${DATABASE_PASSWORD}
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  redis:
+    image: redis:latest
+    container_name: dev_redis
+    ports:
+      - "6379:6379"
+
+  backend:
+    build:
+      context: ./secure_doc_analyzer
+      dockerfile: Dockerfile
+    container_name: dev_backend
+    env_file: ./secure_doc_analyzer/.env
+    depends_on:
+      - postgres
+      - redis
+    ports:
+      - "8000:8000"
+
+  celery_worker:
+    build:
+      context: ./secure_doc_analyzer
+      dockerfile: Dockerfile
+    container_name: dev_celery
+    env_file: ./secure_doc_analyzer/.env
+    depends_on:
+      - backend
+    command: celery -A secure_doc_analyzer worker -l info
+
+  frontend:
+    build:
+      context: ./secure-doc-frontend
+      dockerfile: Dockerfile
+    container_name: dev_frontend
+    env_file: ./secure-doc-frontend/.env.local
+    depends_on:
+      - backend
+    ports:
+      - "3000:3000"
+
+volumes:
+  postgres_data:
