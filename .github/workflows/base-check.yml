@@ -48,7 +48,7 @@ jobs:
       - name: Install frontend deps
         run: |
           cd secure-doc-frontend
-          npm install
+          npm ci
 
       - name: Lint frontend
         run: |

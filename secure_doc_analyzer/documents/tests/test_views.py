@@ -5,10 +5,13 @@ from django.contrib.auth.models import User
 
 
 @pytest.mark.django_db
-def test_upload_document_success():
+def test_upload_document_success(mocker):
     """
-    Test that an authenticated user can upload a PDF successfully.
+    Test that an authenticated user can upload a PDF successfully (mocking S3 upload).
     """
+    mock_upload = mocker.patch("documents.services.upload_file_to_s3")
+    mock_upload.return_value = "some_s3_key"
+
     User.objects.create_user(username="testuser", password="testpass")
     client = APIClient()
 
@@ -23,12 +26,13 @@ def test_upload_document_success():
     client.credentials(HTTP_AUTHORIZATION=f"Bearer {access_token}")
 
     url = reverse("document-upload")
-
     with open("documents/tests/resources/dummy.pdf", "rb") as f:
         response = client.post(url, {"file": f}, format="multipart")
 
     assert response.status_code == 201
     assert "document_id" in response.data
+
+    mock_upload.assert_called_once()
 
 
 @pytest.mark.django_db
