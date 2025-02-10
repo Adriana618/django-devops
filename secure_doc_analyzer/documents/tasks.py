@@ -28,7 +28,7 @@ def process_document_textract(document_id):
         result = s3_client.download_fileobj(
             settings.AWS_S3_BUCKET, doc.s3_key, file_buffer
         )
-        logging.debud(result)
+        logging.debug(result)
         file_buffer.seek(0)
 
         textract_client = boto3.client(

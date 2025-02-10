@@ -11,7 +11,7 @@ def test_process_document_textract(mocker):
     """
     user = User.objects.create_user(username="testuser", password="testpass")
     doc = Document.objects.create(
-        owner=user, file_name="sample.pdf", s3_key="dummy_key"
+        owner=user, file_name="dummy.pdf", s3_key="dummy_key"
     )
 
     s3_mock = mocker.patch("documents.tasks.boto3.client")
