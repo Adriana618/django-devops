@@ -7,7 +7,8 @@ from django.contrib.auth.models import User
 @pytest.mark.django_db
 def test_upload_document_success(mocker):
     """
-    Test that an authenticated user can upload a PDF successfully (mocking S3 upload).
+    Test that an authenticated user can upload a PDF
+    successfully (mocking S3 upload).
     """
     mock_upload = mocker.patch("documents.services.upload_file_to_s3")
     mock_upload.return_value = "some_s3_key"
