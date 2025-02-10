@@ -7,6 +7,9 @@ export $(shell sed 's/=.*//' $(ENV_PATH))
 up:
 	docker-compose up -d
 
+up-build:
+	docker-compose up --build -d
+
 down:
 	docker-compose down
 

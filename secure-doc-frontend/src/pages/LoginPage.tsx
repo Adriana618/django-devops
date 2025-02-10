@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { TextField, Button, Container, Typography } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import apiClient from "../api/axiosConfig";
+import { AuthContext } from "../context/AuthContext";
 
-const LoginPage: React.FC = () => {
-  const [username, setUsername] = useState<string>("");
-  const [password, setPassword] = useState<string>("");
+function LoginPage() {
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const { login } = useContext(AuthContext);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -15,19 +17,18 @@ const LoginPage: React.FC = () => {
         username,
         password,
       });
-
-      localStorage.setItem("access_token", response.data.access);
-      localStorage.setItem("refresh_token", response.data.refresh);
+      const { access, refresh } = response.data;
+      login(access, refresh);
       navigate("/");
-    } catch (error) {
-      console.error("Login error:", error);
-      alert("Login failed. Check console for details.");
+    } catch (err) {
+      console.error("Login error:", err);
+      alert("Login failed");
     }
   };
 
   return (
     <Container maxWidth="sm" sx={{ mt: 4 }}>
-      <Typography variant="h4" mb={2}>Iniciar Sesión</Typography>
+      <Typography variant="h4" mb={2}>Login</Typography>
       <form onSubmit={handleLogin}>
         <TextField
           fullWidth
@@ -50,6 +51,6 @@ const LoginPage: React.FC = () => {
       </form>
     </Container>
   );
-};
+}
 
 export default LoginPage;
