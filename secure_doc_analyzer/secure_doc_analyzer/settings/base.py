@@ -17,7 +17,14 @@ from pathlib import Path
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 root = environ.Path(__file__) - 3
-env = environ.Env(DEBUG=(bool, False))
+env = environ.Env(
+    DEBUG=(bool, False),
+    DATABASE_NAME=(str, "db_name"),
+    DATABASE_USER=(str, "db_user"),
+    DATABASE_PASSWORD=(str, "db_password"),
+    DATABASE_HOST=(str, "db"),
+    DATABASE_PORT=(str, "5432"),
+)
 
 env_file = os.path.join(root(), ".env")
 if os.path.exists(env_file):
@@ -151,9 +158,5 @@ AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
 AWS_S3_BUCKET = env("AWS_S3_BUCKET")
 AWS_REGION = env("AWS_REGION")
 
-CELERY_BROKER_URL = env(
-    "CELERY_BROKER_URL", default="redis://127.0.0.1:6379/0"
-)
-CELERY_RESULT_BACKEND = env(
-    "CELERY_RESULT_BACKEND", default="redis://127.0.0.1:6379/0"
-)
+CELERY_BROKER_URL = env("CELERY_BROKER_URL", default="redis://127.0.0.1:6379/0")
+CELERY_RESULT_BACKEND = env("CELERY_RESULT_BACKEND", default="redis://127.0.0.1:6379/0")
