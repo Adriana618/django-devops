@@ -24,6 +24,10 @@ env = environ.Env(
     DATABASE_PASSWORD=(str, "db_password"),
     DATABASE_HOST=(str, "db"),
     DATABASE_PORT=(str, "5432"),
+    AWS_ACCESS_KEY_ID=(str, "aws_access_key"),
+    AWS_SECRET_ACCESS_KEY=(str, "aws_secret_key"),
+    AWS_S3_BUCKET=(str, "aws_bucket"),
+    AWS_REGION=(str, "us-east-1")
 )
 
 env_file = os.path.join(root(), ".env")
