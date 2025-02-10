@@ -43,7 +43,7 @@ jobs:
       - name: Node setup
         uses: actions/setup-node@v3
         with:
-          node-version: '18.20.6'
+          node-version: '18'
 
       - name: Install frontend deps
         run: |
